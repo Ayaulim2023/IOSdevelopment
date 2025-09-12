@@ -15,7 +15,7 @@ let isStudent: Bool = true
 let height: Double = 1.70
 let isSecondChild: Bool =  true
 let band: String = "🎶"
-let movie: String = "🎞️"
+let 🎞️: String = "movie"
 
 //bonus
 let currentYear = 2025
@@ -31,7 +31,7 @@ let favoriteMovie: String = "Kill Bill"
 
 //step3
 var myStory: String = """
-    My name is \(firstName) \(lastName). I was born in \(birthYear), so now I am \(age) years old. I am a student: \(isStudent), my height is \(height) meters, and it is \(isSecondChild) that I am the second child in my family. One of my favorite hobbies is \(hobby), and in total I have \(numberOfHobbies) hobbies. My favorite number is \(favoriteNumber), and it is \(isHobbyCreative) that my hobby is creative. I really enjoy listening to \(favoriteBand) and watching \(favoriteMovie).
+    My name is \(firstName) \(lastName). I was born in \(birthYear), so now I am \(age) years old. I am a student: \(isStudent), my height is \(height) meters, and it is \(isSecondChild) that I am the second child in my family. One of my favorite hobbies is \(hobby), and in total I have \(numberOfHobbies) hobbies. My favorite number is \(favoriteNumber), and it is \(isHobbyCreative) that my hobby is creative. I really enjoy listening to \(favoriteBand)\(band) and watching my favorite \(🎞️) \(favoriteMovie).
     """
 
 //step4

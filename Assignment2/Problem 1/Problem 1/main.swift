@@ -13,3 +13,4 @@ for index in 1...100{
     else if index % 3 == 0 && index % 5 == 0 {print("FizzBuzz")}
     else {print(index)}
 }
+//a

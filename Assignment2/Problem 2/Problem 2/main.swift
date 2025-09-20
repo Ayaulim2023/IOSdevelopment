@@ -21,3 +21,4 @@ func isPrime(_ n: Int) -> Bool {
 for i in 1...100{
     if(isPrime(i)==true){print(i)}
 }
+//b

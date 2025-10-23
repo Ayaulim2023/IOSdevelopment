@@ -36,7 +36,6 @@ class ViewController: UIViewController {
             leftDiceImageView.image = UIImage(named: "dice\(leftNumber)")
             rightDiceImageView.image = UIImage(named: "dice\(rightNumber)")
 
-            // Optional: simple animation
             UIView.animate(withDuration: 0.12,
                            animations: { [weak self] in
                             self?.leftDiceImageView.transform = CGAffineTransform(scaleX: 1.08, y: 1.08)

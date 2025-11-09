@@ -11,11 +11,11 @@ import AVFoundation
 class ViewController: UIViewController {
 
     var tracks: [Track] = [
-        Track(title: "Song 1", artist: "Artist 1", coverImageName: "cover1", audioFileName: "track1"),
-        Track(title: "Song 2", artist: "Artist 2", coverImageName: "cover2", audioFileName: "track2"),
-        Track(title: "Song 3", artist: "Artist 3", coverImageName: "cover3", audioFileName: "track3"),
-        Track(title: "Song 4", artist: "Artist 4", coverImageName: "cover4", audioFileName: "track4"),
-        Track(title: "Song 5", artist: "Artist 5", coverImageName: "cover5", audioFileName: "track5")
+        Track(title: "Don't Stop Me Now", artist: "Queen", coverImageName: "cover1", audioFileName: "track1"),
+        Track(title: "We Will Rock You", artist: "Queen", coverImageName: "cover2", audioFileName: "track2"),
+        Track(title: "We Are The Champions", artist: "Queen", coverImageName: "cover3", audioFileName: "track3"),
+        Track(title: "Show Must Go On", artist: "Queen", coverImageName: "cover4", audioFileName: "track4"),
+        Track(title: "Radio Ga GA", artist: "Queen", coverImageName: "cover5", audioFileName: "track5")
     ]
     
     var currentTrackIndex = 0
@@ -27,9 +27,6 @@ class ViewController: UIViewController {
         
         loadTrack(at: currentTrackIndex)
     }
-
-
-    
     
     @IBAction func playPauseTapped(_ sender: UIButton) {
         guard let player = audioPlayer else { return }
@@ -56,7 +53,6 @@ class ViewController: UIViewController {
         playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
     }
 
-    // UI components will go here
     @IBOutlet weak var trackTitleLabel: UILabel!
     @IBOutlet weak var coverImageView: UIImageView!
     @IBOutlet weak var previousButton: UIButton!
@@ -66,7 +62,6 @@ class ViewController: UIViewController {
     func loadTrack(at index: Int) {
         let track = tracks[index]
         
-        // Update UI
         trackTitleLabel.text = track.title
         coverImageView.image = UIImage(named: track.coverImageName)
         

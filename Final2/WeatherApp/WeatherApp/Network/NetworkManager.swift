@@ -18,18 +18,28 @@ class NetworkManager {
     
     // Fetch News Articles
     func fetchNews(completion: @escaping (Result<[NewsArticle], Error>) -> Void) {
-        let urlString = "https://newsapi.org/v2/top-headlines?country=us&apiKey=\(newsAPIKey)"
+        // Rotate through different categories to get varied articles
+        let categories = ["general", "business", "technology", "entertainment", "sports", "science", "health"]
+        let randomCategory = categories.randomElement()!
+        
+        let urlString = "https://newsapi.org/v2/top-headlines?country=us&category=\(randomCategory)&apiKey=\(newsAPIKey)"
+        
+        print("📡 Fetching US \(randomCategory) news...")
         
         AF.request(urlString).responseDecodable(of: NewsResponse.self) { response in
+            print("📥 Response received")
+            
             switch response.result {
             case .success(let newsResponse):
+                print("✅ Success: \(newsResponse.articles.count) \(randomCategory) articles")
                 completion(.success(newsResponse.articles))
+                
             case .failure(let error):
+                print("❌ Error: \(error.localizedDescription)")
                 completion(.failure(error))
             }
         }
     }
-    
     // Fetch Weather Data
     func fetchWeather(city: String, completion: @escaping (Result<WeatherResponse, Error>) -> Void) {
         let urlString = "https://api.openweathermap.org/data/2.5/forecast?q=\(city)&units=metric&appid=\(weatherAPIKey)"

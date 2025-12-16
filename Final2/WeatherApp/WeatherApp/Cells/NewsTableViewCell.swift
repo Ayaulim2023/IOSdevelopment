@@ -15,23 +15,119 @@ class NewsTableViewCell: UITableViewCell {
     @IBOutlet weak var dateLabel: UILabel!
     
     func configure(with article: NewsArticle) {
+        // Title with better styling
         titleLabel.text = article.title
-        descriptionLabel.text = article.description ?? "No description"
+        titleLabel.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
+        titleLabel.textColor = .label
         
-        // Format date
+        // Description with better color
+        descriptionLabel.text = article.description ?? "No description available"
+        descriptionLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        descriptionLabel.textColor = .secondaryLabel
+        
+        // Date with icon
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         if let date = dateFormatter.date(from: article.publishedAt) {
             dateFormatter.dateStyle = .medium
             dateFormatter.timeStyle = .short
-            dateLabel.text = dateFormatter.string(from: date)
+            let timeAgo = getTimeAgo(from: date)
+            dateLabel.text = "🕒 \(timeAgo) • \(article.source.name)"
         }
+        dateLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+        dateLabel.textColor = .tertiaryLabel
         
         // Load image with Kingfisher
         if let imageUrl = article.urlToImage, let url = URL(string: imageUrl) {
-            articleImageView.kf.setImage(with: url, placeholder: UIImage(systemName: "photo"))
+            articleImageView.kf.setImage(
+                with: url,
+                placeholder: UIImage(systemName: "photo.fill"),
+                options: [
+                    .transition(.fade(0.2)),
+                    .cacheOriginalImage
+                ]
+            )
         } else {
-            articleImageView.image = UIImage(systemName: "photo")
+            articleImageView.image = UIImage(systemName: "photo.fill")
+            articleImageView.tintColor = .systemGray3
         }
+    }
+
+    // Helper function for "2 hours ago" format
+    private func getTimeAgo(from date: Date) -> String {
+        let calendar = Calendar.current
+        let now = Date()
+        let components = calendar.dateComponents([.minute, .hour, .day], from: date, to: now)
+        
+        if let day = components.day, day > 0 {
+            return "\(day)d ago"
+        } else if let hour = components.hour, hour > 0 {
+            return "\(hour)h ago"
+        } else if let minute = components.minute, minute > 0 {
+            return "\(minute)m ago"
+        } else {
+            return "Just now"
+        }
+    }
+    
+//    override func awakeFromNib() {
+//        super.awakeFromNib()
+//        
+//        // Add card style with shadow
+//        contentView.layer.cornerRadius = 12
+//        contentView.layer.masksToBounds = true
+//        
+//        // Shadow on the cell itself (not content view)
+//        layer.cornerRadius = 12
+//        layer.shadowColor = UIColor.black.cgColor
+//        layer.shadowOffset = CGSize(width: 0, height: 2)
+//        layer.shadowOpacity = 0.1
+//        layer.shadowRadius = 4
+//        layer.masksToBounds = false
+//        
+//        // Add margin around cell
+//        layer.shadowPath = UIBezierPath(
+//            roundedRect: bounds.insetBy(dx: 0, dy: 4),
+//            cornerRadius: 12
+//        ).cgPath
+//    }
+//
+//    override func layoutSubviews() {
+//        super.layoutSubviews()
+//        
+//        // Add spacing between cells
+//        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16))
+//    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        // Round image corners
+        articleImageView.layer.cornerRadius = 8
+        articleImageView.clipsToBounds = true
+        
+        // Add card style with shadow
+        contentView.layer.cornerRadius = 12
+        contentView.layer.masksToBounds = true
+        
+        // Shadow on the cell itself (not content view)
+        layer.cornerRadius = 12
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOffset = CGSize(width: 0, height: 2)
+        layer.shadowOpacity = 0.1
+        layer.shadowRadius = 4
+        layer.masksToBounds = false
+        
+        // Add margin around cell
+        layer.shadowPath = UIBezierPath(
+            roundedRect: bounds.insetBy(dx: 0, dy: 4),
+            cornerRadius: 12
+        ).cgPath
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        // Add spacing between cells
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16))
     }
 }

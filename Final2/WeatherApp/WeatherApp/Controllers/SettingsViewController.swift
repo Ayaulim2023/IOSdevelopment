@@ -19,9 +19,29 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Settings"
+//        title = "Settings"
+        navigationController?.navigationBar.prefersLargeTitles = true
+        
+        view.backgroundColor = .systemGroupedBackground
+        styleUI()
         loadSettings()
         setupTableView()
+    }
+
+    func styleUI() {
+        // Style clear button
+        if let clearButton = view.viewWithTag(100) as? UIButton {
+            clearButton.layer.cornerRadius = 12
+            clearButton.backgroundColor = .systemRed
+            clearButton.setTitleColor(.white, for: .normal)
+        }
+    }
+
+    func setupTableView() {
+        favoritesTableView.delegate = self
+        favoritesTableView.dataSource = self
+        favoritesTableView.backgroundColor = .clear
+        favoritesTableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -29,10 +49,10 @@ class SettingsViewController: UIViewController {
         loadFavorites()
     }
     
-    func setupTableView() {
-        favoritesTableView.delegate = self
-        favoritesTableView.dataSource = self
-    }
+//    func setupTableView() {
+//        favoritesTableView.delegate = self
+//        favoritesTableView.dataSource = self
+//    }
     
     func loadSettings() {
         notificationsSwitch.isOn = UserDefaults.standard.bool(forKey: "notificationsEnabled")

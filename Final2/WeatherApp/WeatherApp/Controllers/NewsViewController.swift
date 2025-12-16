@@ -17,7 +17,22 @@ class NewsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Add large title
+        navigationController?.navigationBar.prefersLargeTitles = true
         title = "Top News"
+        
+        // Custom navigation bar color
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .systemBackground
+        appearance.largeTitleTextAttributes = [
+            .foregroundColor: UIColor.label,
+            .font: UIFont.systemFont(ofSize: 34, weight: .bold)
+        ]
+        
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        
         setupTableView()
         loadFavorites()
         fetchNews()
@@ -27,37 +42,53 @@ class NewsViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 120
+        tableView.estimatedRowHeight = 200
+        tableView.separatorStyle = .none // Remove default separators
+        tableView.backgroundColor = .systemGroupedBackground // Better background
         
-        // Add pull to refresh
+        // Styled refresh control
+        refreshControl.tintColor = .systemBlue
+        refreshControl.attributedTitle = NSAttributedString(
+            string: "Pull to refresh news",
+            attributes: [.foregroundColor: UIColor.secondaryLabel]
+        )
         refreshControl.addTarget(self, action: #selector(refreshNews), for: .valueChanged)
         tableView.refreshControl = refreshControl
     }
     
-    @objc func refreshNews() {
-        fetchNews()
-    }
-    
+//    @objc func refreshNews() {
+//        fetchNews()
+//    }
+//    
     func fetchNews() {
-        // Show loading indicator
+        // Show loading indicator (only if not already refreshing)
         if !refreshControl.isRefreshing {
             showLoadingIndicator()
         }
         
         NetworkManager.shared.fetchNews { [weak self] result in
             DispatchQueue.main.async {
+                // IMPORTANT: Hide loading on main thread
                 self?.hideLoadingIndicator()
-                self?.refreshControl.endRefreshing()
+                self?.refreshControl.endRefreshing()  // Stop the spinner
                 
                 switch result {
                 case .success(let articles):
+                    print("✅ Fetched \(articles.count) articles")  // Debug
                     self?.articles = articles
-                    self?.tableView.reloadData()
+                    self?.tableView.reloadData()  // Refresh the table
+                    
                 case .failure(let error):
+                    print("❌ Error: \(error.localizedDescription)")  // Debug
                     self?.showError(message: error.localizedDescription)
                 }
             }
         }
+    }
+
+    @objc func refreshNews() {
+        print("🔄 Pull to refresh triggered")  // Debug
+        fetchNews()
     }
     
     func loadFavorites() {

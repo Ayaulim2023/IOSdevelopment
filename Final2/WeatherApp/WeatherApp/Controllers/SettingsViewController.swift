@@ -19,7 +19,6 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        title = "Settings"
         navigationController?.navigationBar.prefersLargeTitles = true
         
         view.backgroundColor = .systemGroupedBackground
@@ -29,7 +28,6 @@ class SettingsViewController: UIViewController {
     }
 
     func styleUI() {
-        // Style clear button
         if let clearButton = view.viewWithTag(100) as? UIButton {
             clearButton.layer.cornerRadius = 12
             clearButton.backgroundColor = .systemRed
@@ -49,11 +47,7 @@ class SettingsViewController: UIViewController {
         loadFavorites()
     }
     
-//    func setupTableView() {
-//        favoritesTableView.delegate = self
-//        favoritesTableView.dataSource = self
-//    }
-    
+
     func loadSettings() {
         notificationsSwitch.isOn = UserDefaults.standard.bool(forKey: "notificationsEnabled")
         let refreshInterval = UserDefaults.standard.float(forKey: "refreshInterval")

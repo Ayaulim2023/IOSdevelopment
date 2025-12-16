@@ -11,14 +11,12 @@ import Alamofire
 class NetworkManager {
     static let shared = NetworkManager()
     
-    private let newsAPIKey = "3b66db012c664d87b0a5b8f63c8258aa" // We'll get this free
-    private let weatherAPIKey = "0a203a98c56e18d7c00df3726ba87453" // We'll get this free
+    private let newsAPIKey = "3b66db012c664d87b0a5b8f63c8258aa"
+    private let weatherAPIKey = "0a203a98c56e18d7c00df3726ba87453"
     
     private init() {}
     
-    // Fetch News Articles
     func fetchNews(completion: @escaping (Result<[NewsArticle], Error>) -> Void) {
-        // Rotate through different categories to get varied articles
         let categories = ["general", "business", "technology", "entertainment", "sports", "science", "health"]
         let randomCategory = categories.randomElement()!
         
@@ -40,7 +38,6 @@ class NetworkManager {
             }
         }
     }
-    // Fetch Weather Data
     func fetchWeather(city: String, completion: @escaping (Result<WeatherResponse, Error>) -> Void) {
         let urlString = "https://api.openweathermap.org/data/2.5/forecast?q=\(city)&units=metric&appid=\(weatherAPIKey)"
         

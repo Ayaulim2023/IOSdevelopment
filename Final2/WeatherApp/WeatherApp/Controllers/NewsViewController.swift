@@ -11,13 +11,12 @@ class NewsViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     var articles: [NewsArticle] = []
-    var favoriteArticles: [String] = [] // URLs of favorite articles
+    var favoriteArticles: [String] = []
     let refreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Add large title
         navigationController?.navigationBar.prefersLargeTitles = true
         title = "Top News"
         
@@ -43,8 +42,8 @@ class NewsViewController: UIViewController {
         tableView.dataSource = self
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 200
-        tableView.separatorStyle = .none // Remove default separators
-        tableView.backgroundColor = .systemGroupedBackground // Better background
+        tableView.separatorStyle = .none
+        tableView.backgroundColor = .systemGroupedBackground
         
         // Styled refresh control
         refreshControl.tintColor = .systemBlue
@@ -56,12 +55,8 @@ class NewsViewController: UIViewController {
         tableView.refreshControl = refreshControl
     }
     
-//    @objc func refreshNews() {
-//        fetchNews()
-//    }
-//    
+   
     func fetchNews() {
-        // Show loading indicator (only if not already refreshing)
         if !refreshControl.isRefreshing {
             showLoadingIndicator()
         }
@@ -87,7 +82,7 @@ class NewsViewController: UIViewController {
     }
 
     @objc func refreshNews() {
-        print("🔄 Pull to refresh triggered")  // Debug
+        print("🔄 Pull to refresh triggered")
         fetchNews()
     }
     
@@ -135,7 +130,6 @@ extension NewsViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         let article = articles[indexPath.row]
         
-        // Open in Safari
         if let url = URL(string: article.url) {
             UIApplication.shared.open(url)
         }

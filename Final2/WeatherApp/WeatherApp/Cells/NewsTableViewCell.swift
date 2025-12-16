@@ -15,17 +15,14 @@ class NewsTableViewCell: UITableViewCell {
     @IBOutlet weak var dateLabel: UILabel!
     
     func configure(with article: NewsArticle) {
-        // Title with better styling
         titleLabel.text = article.title
         titleLabel.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
         titleLabel.textColor = .label
         
-        // Description with better color
         descriptionLabel.text = article.description ?? "No description available"
         descriptionLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         descriptionLabel.textColor = .secondaryLabel
         
-        // Date with icon
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         if let date = dateFormatter.date(from: article.publishedAt) {
@@ -53,7 +50,6 @@ class NewsTableViewCell: UITableViewCell {
         }
     }
 
-    // Helper function for "2 hours ago" format
     private func getTimeAgo(from date: Date) -> String {
         let calendar = Calendar.current
         let now = Date()
@@ -70,46 +66,15 @@ class NewsTableViewCell: UITableViewCell {
         }
     }
     
-//    override func awakeFromNib() {
-//        super.awakeFromNib()
-//        
-//        // Add card style with shadow
-//        contentView.layer.cornerRadius = 12
-//        contentView.layer.masksToBounds = true
-//        
-//        // Shadow on the cell itself (not content view)
-//        layer.cornerRadius = 12
-//        layer.shadowColor = UIColor.black.cgColor
-//        layer.shadowOffset = CGSize(width: 0, height: 2)
-//        layer.shadowOpacity = 0.1
-//        layer.shadowRadius = 4
-//        layer.masksToBounds = false
-//        
-//        // Add margin around cell
-//        layer.shadowPath = UIBezierPath(
-//            roundedRect: bounds.insetBy(dx: 0, dy: 4),
-//            cornerRadius: 12
-//        ).cgPath
-//    }
-//
-//    override func layoutSubviews() {
-//        super.layoutSubviews()
-//        
-//        // Add spacing between cells
-//        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16))
-//    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Round image corners
         articleImageView.layer.cornerRadius = 8
         articleImageView.clipsToBounds = true
         
-        // Add card style with shadow
         contentView.layer.cornerRadius = 12
         contentView.layer.masksToBounds = true
         
-        // Shadow on the cell itself (not content view)
         layer.cornerRadius = 12
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowOffset = CGSize(width: 0, height: 2)
@@ -117,7 +82,6 @@ class NewsTableViewCell: UITableViewCell {
         layer.shadowRadius = 4
         layer.masksToBounds = false
         
-        // Add margin around cell
         layer.shadowPath = UIBezierPath(
             roundedRect: bounds.insetBy(dx: 0, dy: 4),
             cornerRadius: 12
@@ -127,7 +91,6 @@ class NewsTableViewCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        // Add spacing between cells
         contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16))
     }
 }

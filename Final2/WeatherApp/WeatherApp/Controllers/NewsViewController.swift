@@ -20,7 +20,6 @@ class NewsViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         title = "Top News"
         
-        // Custom navigation bar color
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = .systemBackground
@@ -63,18 +62,17 @@ class NewsViewController: UIViewController {
         
         NetworkManager.shared.fetchNews { [weak self] result in
             DispatchQueue.main.async {
-                // IMPORTANT: Hide loading on main thread
                 self?.hideLoadingIndicator()
-                self?.refreshControl.endRefreshing()  // Stop the spinner
+                self?.refreshControl.endRefreshing()
                 
                 switch result {
                 case .success(let articles):
-                    print("✅ Fetched \(articles.count) articles")  // Debug
+                    print("✅ Fetched \(articles.count) articles")
                     self?.articles = articles
-                    self?.tableView.reloadData()  // Refresh the table
+                    self?.tableView.reloadData()
                     
                 case .failure(let error):
-                    print("❌ Error: \(error.localizedDescription)")  // Debug
+                    print("❌ Error: \(error.localizedDescription)")
                     self?.showError(message: error.localizedDescription)
                 }
             }

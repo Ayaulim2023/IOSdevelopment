@@ -39,7 +39,6 @@ class NetworkManager {
         }
     }
     func fetchWeather(city: String, unit: String = "metric", completion: @escaping (Result<WeatherResponse, Error>) -> Void) {
-        // unit can be "metric" (Celsius) or "imperial" (Fahrenheit)
         let urlString = "https://api.openweathermap.org/data/2.5/forecast?q=\(city)&units=\(unit)&appid=\(weatherAPIKey)"
         
         print("🌤️ Fetching weather for: \(city) in \(unit) units")

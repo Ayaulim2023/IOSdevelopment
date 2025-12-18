@@ -28,17 +28,14 @@ class WeatherViewController: UIViewController {
         override func viewDidAppear(_ animated: Bool) {
             super.viewDidAppear(animated)
             
-            // Fetch weather AFTER view appears
             if weatherItems.isEmpty {
                 fetchWeather()
             }
         }
         
-        // NEW: Fetch weather when returning from Settings (unit might have changed)
         override func viewWillAppear(_ animated: Bool) {
             super.viewWillAppear(animated)
             
-            // Refresh weather if unit changed
             if !weatherItems.isEmpty {
                 fetchWeather()
             }
@@ -72,15 +69,12 @@ class WeatherViewController: UIViewController {
             UserDefaults.standard.set(currentCity, forKey: "lastCity")
         }
         
-        // NEW: Get current temperature unit from Settings
         func getTemperatureUnit() -> (apiUnit: String, displaySymbol: String) {
             let selectedIndex = UserDefaults.standard.integer(forKey: "temperatureUnit")
             
             if selectedIndex == 1 {
-                // Fahrenheit
                 return ("imperial", "°F")
             } else {
-                // Celsius (default)
                 return ("metric", "°C")
             }
         }
@@ -104,10 +98,8 @@ class WeatherViewController: UIViewController {
         func fetchWeather() {
             print("🌤️ Fetching weather for: \(currentCity)")
             
-            // Get temperature unit from settings
             let tempUnit = getTemperatureUnit()
             
-            // Pass the unit to the API
             NetworkManager.shared.fetchWeather(city: currentCity, unit: tempUnit.apiUnit) { [weak self] result in
                 DispatchQueue.main.async {
                     switch result {
@@ -144,10 +136,8 @@ class WeatherViewController: UIViewController {
         func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCell", for: indexPath) as! WeatherCollectionViewCell
             
-            // Get temperature unit symbol
             let tempUnit = getTemperatureUnit()
             
-            // Configure cell with the unit symbol
             cell.configure(with: weatherItems[indexPath.item], unitSymbol: tempUnit.displaySymbol)
             
             cell.layer.cornerRadius = 10

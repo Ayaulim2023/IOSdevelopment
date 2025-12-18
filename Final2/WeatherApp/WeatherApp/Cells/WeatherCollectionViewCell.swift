@@ -42,7 +42,6 @@ class WeatherCollectionViewCell: UICollectionViewCell {
     }
 
     func configure(with weather: WeatherItem, unitSymbol: String) {
-        // Format date
         let date = Date(timeIntervalSince1970: TimeInterval(weather.dt))
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM dd"
@@ -54,19 +53,16 @@ class WeatherCollectionViewCell: UICollectionViewCell {
         dateLabel.textAlignment = .center
         dateLabel.font = UIFont.systemFont(ofSize: 13, weight: .medium)
         
-        // Temperature with correct unit symbol
         let temp = Int(weather.main.temp)
         temperatureLabel.text = "\(temp)\(unitSymbol)"  // ← Uses passed symbol!
         temperatureLabel.textAlignment = .center
         temperatureLabel.font = UIFont.systemFont(ofSize: 36, weight: .bold)
         
-        // Description
         descriptionLabel.text = weather.weather.first?.description.capitalized
         descriptionLabel.textAlignment = .center
         descriptionLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         descriptionLabel.numberOfLines = 2
         
-        // Weather icon
         if let iconCode = weather.weather.first?.icon {
             let urlString = "https://openweathermap.org/img/wn/\(iconCode)@2x.png"
             if let url = URL(string: urlString) {

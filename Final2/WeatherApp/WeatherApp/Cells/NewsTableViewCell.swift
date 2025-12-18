@@ -34,7 +34,6 @@ class NewsTableViewCell: UITableViewCell {
         dateLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         dateLabel.textColor = .tertiaryLabel
         
-        // Load image with Kingfisher
         if let imageUrl = article.urlToImage, let url = URL(string: imageUrl) {
             articleImageView.kf.setImage(
                 with: url,

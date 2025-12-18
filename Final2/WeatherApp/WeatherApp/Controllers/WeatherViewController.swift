@@ -28,7 +28,18 @@ class WeatherViewController: UIViewController {
         override func viewDidAppear(_ animated: Bool) {
             super.viewDidAppear(animated)
             
+            // Fetch weather AFTER view appears
             if weatherItems.isEmpty {
+                fetchWeather()
+            }
+        }
+        
+        // NEW: Fetch weather when returning from Settings (unit might have changed)
+        override func viewWillAppear(_ animated: Bool) {
+            super.viewWillAppear(animated)
+            
+            // Refresh weather if unit changed
+            if !weatherItems.isEmpty {
                 fetchWeather()
             }
         }
@@ -61,6 +72,19 @@ class WeatherViewController: UIViewController {
             UserDefaults.standard.set(currentCity, forKey: "lastCity")
         }
         
+        // NEW: Get current temperature unit from Settings
+        func getTemperatureUnit() -> (apiUnit: String, displaySymbol: String) {
+            let selectedIndex = UserDefaults.standard.integer(forKey: "temperatureUnit")
+            
+            if selectedIndex == 1 {
+                // Fahrenheit
+                return ("imperial", "°F")
+            } else {
+                // Celsius (default)
+                return ("metric", "°C")
+            }
+        }
+        
         @IBAction func searchButtonTapped(_ sender: UIButton) {
             searchWeather()
         }
@@ -80,18 +104,23 @@ class WeatherViewController: UIViewController {
         func fetchWeather() {
             print("🌤️ Fetching weather for: \(currentCity)")
             
-            NetworkManager.shared.fetchWeather(city: currentCity) { [weak self] result in
+            // Get temperature unit from settings
+            let tempUnit = getTemperatureUnit()
+            
+            // Pass the unit to the API
+            NetworkManager.shared.fetchWeather(city: currentCity, unit: tempUnit.apiUnit) { [weak self] result in
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let weatherResponse):
                         print("✅ Weather data received: \(weatherResponse.list.count) items")
                         self?.weatherItems = weatherResponse.list
                         self?.collectionView.reloadData()
-                        self?.title = "Weather: \(weatherResponse.city.name)"
+                        
+                        // Update title with unit
+                        self?.title = "Weather: \(weatherResponse.city.name) (\(tempUnit.displaySymbol))"
                         
                     case .failure(let error):
                         print("❌ Weather error: \(error.localizedDescription)")
-                        // Only show error if view is visible
                         if self?.isViewLoaded == true && self?.view.window != nil {
                             self?.showError(message: "Could not load weather for \(self?.currentCity ?? "city")")
                         }
@@ -114,7 +143,13 @@ class WeatherViewController: UIViewController {
         
         func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCell", for: indexPath) as! WeatherCollectionViewCell
-            cell.configure(with: weatherItems[indexPath.item])
+            
+            // Get temperature unit symbol
+            let tempUnit = getTemperatureUnit()
+            
+            // Configure cell with the unit symbol
+            cell.configure(with: weatherItems[indexPath.item], unitSymbol: tempUnit.displaySymbol)
+            
             cell.layer.cornerRadius = 10
             cell.layer.borderWidth = 1
             cell.layer.borderColor = UIColor.systemGray4.cgColor

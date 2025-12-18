@@ -41,25 +41,30 @@ class WeatherCollectionViewCell: UICollectionViewCell {
         }
     }
 
-    func configure(with weather: WeatherItem) {
+    func configure(with weather: WeatherItem, unitSymbol: String) {
+        // Format date
         let date = Date(timeIntervalSince1970: TimeInterval(weather.dt))
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM dd"
         let timeFormatter = DateFormatter()
         timeFormatter.dateFormat = "HH:mm"
         
-        dateLabel.text = "📅 \(dateFormatter.string(from: date))\n\(timeFormatter.string(from: date))"
+        dateLabel.text = "\(dateFormatter.string(from: date))\n\(timeFormatter.string(from: date))"
         dateLabel.numberOfLines = 2
+        dateLabel.textAlignment = .center
         dateLabel.font = UIFont.systemFont(ofSize: 13, weight: .medium)
         
-        // Temperature with degree symbol
+        // Temperature with correct unit symbol
         let temp = Int(weather.main.temp)
-        temperatureLabel.text = "\(temp)°"
+        temperatureLabel.text = "\(temp)\(unitSymbol)"  // ← Uses passed symbol!
+        temperatureLabel.textAlignment = .center
         temperatureLabel.font = UIFont.systemFont(ofSize: 36, weight: .bold)
         
         // Description
         descriptionLabel.text = weather.weather.first?.description.capitalized
+        descriptionLabel.textAlignment = .center
         descriptionLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        descriptionLabel.numberOfLines = 2
         
         // Weather icon
         if let iconCode = weather.weather.first?.icon {
@@ -74,7 +79,7 @@ class WeatherCollectionViewCell: UICollectionViewCell {
                 }.resume()
             }
         }
-        
     }
+
 
 }

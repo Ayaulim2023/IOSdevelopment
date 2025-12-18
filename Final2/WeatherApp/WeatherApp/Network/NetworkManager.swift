@@ -38,14 +38,20 @@ class NetworkManager {
             }
         }
     }
-    func fetchWeather(city: String, completion: @escaping (Result<WeatherResponse, Error>) -> Void) {
-        let urlString = "https://api.openweathermap.org/data/2.5/forecast?q=\(city)&units=metric&appid=\(weatherAPIKey)"
+    func fetchWeather(city: String, unit: String = "metric", completion: @escaping (Result<WeatherResponse, Error>) -> Void) {
+        // unit can be "metric" (Celsius) or "imperial" (Fahrenheit)
+        let urlString = "https://api.openweathermap.org/data/2.5/forecast?q=\(city)&units=\(unit)&appid=\(weatherAPIKey)"
+        
+        print("🌤️ Fetching weather for: \(city) in \(unit) units")
         
         AF.request(urlString).responseDecodable(of: WeatherResponse.self) { response in
             switch response.result {
             case .success(let weatherResponse):
+                print("✅ Weather data received for \(weatherResponse.city.name)")
                 completion(.success(weatherResponse))
+                
             case .failure(let error):
+                print("❌ Weather API Error: \(error)")
                 completion(.failure(error))
             }
         }
